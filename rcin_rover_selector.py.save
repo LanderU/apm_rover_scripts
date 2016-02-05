@@ -1,0 +1,42 @@
+#
+#message -> mavros/OverrideRCIn
+#topic -> mavros/rc/override
+#
+
+#!/usr/bin/env python3
+
+import os
+import sys
+import math
+import socket
+import rospy
+from mavros_msgs.msg import OverrideRCIn
+from mavros_msgs.srv import SetMode
+
+
+def talker():
+	pub = rospy.Publisher('mavros/rc/override', OverrideRCIn, queue_size=10)
+    	rospy.init_node('custom_talker', anonymous=True)
+	r = rospy.Rate(10) #10hz
+	msg = OverrideRCIn()
+	speed=
+	msg.channels[2]=1200
+
+	while not rospy.is_shutdown():
+        	rospy.loginfo(msg)
+        	pub.publish(msg)
+        	r.sleep()
+
+if __name__ == '__main__':
+
+	rospy.wait_for_service('/mavros/set_mode')
+	change_mode = rospy.ServiceProxy('/mavros/set_mode', SetMode)
+	resp1 = change_mode(custom_mode="manual")
+	print (resp1)
+        
+	if "True" in str(resp1):
+    		try:
+	        	talker()
+	
+		except rospy.ROSInterruptException: pass
+
