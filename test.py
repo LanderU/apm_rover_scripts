@@ -1,22 +1,25 @@
 #!/usr/bin/env python3
+# ROS
 import rospy
 from std_msgs.msg import String
+from mavros_msgs.srv import SetMode
+from mavros_msgs.msg import OverrideRCIn
+from mavros_msgs.srv import SetMode
+# System
+import time
+
 
 rospy.init_node('rosimple_node', anonymous=True)
-import rospy
-from mavros_msgs.srv import SetMode
+
 rospy.wait_for_service('/mavros/set_mode')
+
 try:
  change_mode = rospy.ServiceProxy('/mavros/set_mode', SetMode)
  mode='MANUAL'
  resp1 = change_mode(0,mode)
 except rospy.ServiceException as e:
- print ("Service call failed: %s" %e
- )
-import rospy
-import time
-from mavros_msgs.msg import OverrideRCIn
-from mavros_msgs.srv import SetMode
+ print ("Service call failed: %s" %e)
+
 throttle_channel=2
 steer_channel=0
 
